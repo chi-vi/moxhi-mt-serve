@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "moxhimt-runner"
+version = "0.2.0"
+description = "CLI va API server chay mo hinh dich Trung-Viet MoxhiMT"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "huggingface-hub>=0.27,<2",
+  "sentencepiece>=0.2,<1",
+  "transformers>=4.46,<6",
+]
+
+[project.optional-dependencies]
+pytorch = ["torch>=2.2"]
+cpu = ["ctranslate2>=4.5,<5"]
+server = [
+  "fastapi>=0.115,<1",
+  "uvicorn[standard]>=0.34,<1",
+]
+dev = [
+  "httpx>=0.27,<1",
+  "pytest>=8,<10",
+  "ruff>=0.9",
+]
+
+[project.scripts]
+moxhimt = "moxhimt_runner.cli:main"
+moxhimt-server = "moxhimt_runner.server:main"
+moxhimt-server-cpu = "moxhimt_runner.server_cpu:main"
+moxhimt-server-cuda = "moxhimt_runner.server_cuda:main"
+moxhimt-server-rocm = "moxhimt_runner.server_rocm:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/moxhimt_runner"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
